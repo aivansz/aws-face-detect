@@ -56,7 +56,7 @@ const indexColection = function(images){
     if(err){
       throw err
     }
-    console.log(...data.FaceRecords);
+    console.log(JSON.stringify(data.FaceRecords));
     return data
   })
   });
