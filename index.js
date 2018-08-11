@@ -1,15 +1,20 @@
 const AWS = require('aws-sdk');
 
+//set AWS region to virgia (required for rekogtion)
 AWS.config.update({region:'us-east-1'});
 
+//set S3
 const s3 =  new AWS.S3();
 
+//set rekignition
 const reko = new AWS.Rekognition();
 
+//set bucket
 const params = {
   Bucket: 'fa-imagens-ivan'
 };
 
+//list objects from S3
 const listObjects =  new Promise(function(resolve, reject){
   let images = [];
   s3.listObjects(params, function(err, data){
@@ -25,6 +30,7 @@ const listObjects =  new Promise(function(resolve, reject){
 
 });
 
+//create rekognition collection of faces
 const createCollection = function(){
     const params = {
       CollectionId: "faces"
@@ -40,6 +46,7 @@ const createCollection = function(){
     })
 }
 
+//index faces from S3 bucket on created collection
 const indexColection = function(images){
   images.map(image => {
     reko.indexFaces({
@@ -63,6 +70,7 @@ const indexColection = function(images){
 
 }
 
+//execution 
 const images = listObjects
   .then(
     (images) => {
